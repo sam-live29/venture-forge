@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Plus, Trash2, User, Users, ArrowRight, Check } from 'lucide-react';
+import { motion } from 'motion/react';
 
 const Apply: React.FC = () => {
   const [role, setRole] = useState<'founder' | 'co-founder' | null>(null);
@@ -107,20 +108,24 @@ ${formData.whyVentureForge}
 
   if (!role) {
     return (
-      <div className="animate-in fade-in zoom-in duration-500 min-h-[70vh] flex items-center justify-center px-4 bg-transparent">
+      <div className="animate-in fade-in zoom-in duration-500 min-h-[85vh] flex flex-col items-center justify-start md:justify-center px-4 pt-16 md:pt-0 bg-transparent">
         <div className="max-w-2xl w-full text-center">
-          <h1 className="text-4xl font-bold text-vf-blue mb-4 tracking-tight">Choose Your Path</h1>
-          <p className="text-lg text-gray-600 mb-12">Are you applying as the primary founder or as a co-founder of an existing team?</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-vf-blue mb-2 md:mb-4 tracking-tight">Choose Your Path</h1>
+          <p className="text-base md:text-lg text-gray-600 mb-6 md:mb-12">Are you applying as a primary founder or as a co-founder of an existing team?</p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <button 
               onClick={() => setRole('founder')}
               className="group p-8 bg-white/40 backdrop-blur-sm border-2 border-gray-100 rounded-sm hover:border-vf-blue transition-all text-left shadow-sm hover:shadow-xl"
             >
-              <div className="w-12 h-12 bg-vf-blue/5 text-vf-blue rounded-full flex items-center justify-center mb-6 group-hover:bg-vf-blue group-hover:text-white transition-colors">
+              <motion.div 
+                whileHover={{ scale: 1.15, rotate: 8 }}
+                className="w-12 h-12 bg-vf-blue/5 text-vf-blue rounded-full flex items-center justify-center mb-6 transition-all duration-300 shadow-md border-2 border-transparent group-hover:border-vf-blue/30 group-hover:bg-vf-blue/10"
+              >
                 <User className="w-6 h-6" />
-              </div>
+              </motion.div>
               <h3 className="text-xl font-bold text-vf-blue mb-2">Apply as Founder</h3>
+              <p className="text-sm text-gray-500 mb-6 font-medium italic">"Forge the vision, lead the mission."</p>
               <p className="text-sm text-gray-500 mb-6">You are the primary visionary or a solo founder starting a new journey.</p>
               <div className="flex items-center text-vf-blue font-bold text-sm">
                 Get Started <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
@@ -135,10 +140,14 @@ ${formData.whyVentureForge}
               }}
               className="group p-8 bg-white/40 backdrop-blur-sm border-2 border-gray-100 rounded-sm hover:border-vf-orange transition-all text-left shadow-sm hover:shadow-xl"
             >
-              <div className="w-12 h-12 bg-vf-orange/5 text-vf-orange rounded-full flex items-center justify-center mb-6 group-hover:bg-vf-orange group-hover:text-white transition-colors">
+              <motion.div 
+                whileHover={{ scale: 1.15, rotate: -8 }}
+                className="w-12 h-12 bg-vf-orange/5 text-vf-orange rounded-full flex items-center justify-center mb-6 transition-all duration-300 shadow-md border-2 border-transparent group-hover:border-vf-orange/30 group-hover:bg-vf-orange/10"
+              >
                 <Users className="w-6 h-6" />
-              </div>
+              </motion.div>
               <h3 className="text-xl font-bold text-vf-blue mb-2">Apply as Co-Founder</h3>
+              <p className="text-sm text-gray-500 mb-6 font-medium italic">"Scale faster, win together."</p>
               <p className="text-sm text-gray-500 mb-6">You are part of a founding team and want to bring your co-founders along.</p>
               <div className="flex items-center text-vf-orange font-bold text-sm">
                 Join as Team <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
@@ -211,25 +220,27 @@ ${formData.whyVentureForge}
               <section className="animate-in fade-in slide-in-from-top-4 duration-500">
                 <div className="flex justify-between items-center mb-8 border-b border-gray-100 pb-2">
                   <h2 className="text-xs font-black text-vf-blue uppercase tracking-[0.3em]">01b. Co-Founder Details</h2>
-                  <button 
+                  <motion.button 
                     type="button" 
                     onClick={addCoFounder}
-                    className="flex items-center text-[10px] font-black text-vf-orange uppercase tracking-widest hover:text-orange-600 transition-colors"
+                    whileTap={{ scale: 0.92, y: 1.5 }}
+                    className="flex items-center px-4 py-2 bg-vf-orange/5 border border-vf-orange/20 rounded-sm text-[10px] font-black text-vf-orange uppercase tracking-widest transition-all duration-150 shadow-sm"
                   >
-                    <Plus className="w-3 h-3 mr-1" /> Add Co-Founder
-                  </button>
+                    <Plus className="w-3 h-3 mr-2" /> Add Co-Founder
+                  </motion.button>
                 </div>
                 
                 <div className="space-y-8">
                   {formData.coFounders.map((cf, index) => (
                     <div key={index} className="p-6 bg-white/20 backdrop-blur-sm border border-gray-200 rounded-sm relative group">
-                      <button 
+                      <motion.button 
                         type="button" 
                         onClick={() => removeCoFounder(index)}
+                        whileTap={{ scale: 0.8 }}
                         className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />
-                      </button>
+                      </motion.button>
                       
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
@@ -272,13 +283,14 @@ ${formData.whyVentureForge}
                   {formData.coFounders.length === 0 && (
                     <div className="text-center py-8 border-2 border-dashed border-gray-200 rounded-sm">
                       <p className="text-sm text-gray-400 mb-4">No co-founders added yet.</p>
-                      <button 
+                      <motion.button 
                         type="button" 
                         onClick={addCoFounder}
-                        className="px-4 py-2 bg-vf-blue text-white text-xs font-bold rounded-sm"
+                        whileTap={{ scale: 0.94, y: 2 }}
+                        className="px-6 py-3 bg-vf-blue text-white text-xs font-black uppercase tracking-widest rounded-sm transition-all duration-150"
                       >
                         Add Your First Co-Founder
-                      </button>
+                      </motion.button>
                     </div>
                   )}
                 </div>
