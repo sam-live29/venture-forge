@@ -37,16 +37,20 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between h-20">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
+              <span className="logo-text text-2xl font-black text-vf-blue tracking-tighter">VENTURE FORGE</span>
               <img 
                 src="https://raw.githubusercontent.com/Venture-Forge/assets/main/logo.png" 
                 alt="Venture Forge" 
-                className="h-10 md:h-12 w-auto py-1"
+                className="h-10 md:h-12 w-auto py-1 absolute left-0 top-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-300"
+                onLoad={(e) => {
+                  e.currentTarget.style.opacity = '1';
+                  const text = e.currentTarget.parentElement?.querySelector('.logo-text') as HTMLElement;
+                  if (text) text.style.display = 'none';
+                }}
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
-                  e.currentTarget.parentElement?.querySelector('.logo-text')?.classList.remove('hidden');
                 }}
               />
-              <span className="logo-text hidden text-2xl font-bold text-vf-blue tracking-tight">VENTURE FORGE</span>
             </Link>
           </div>
           
