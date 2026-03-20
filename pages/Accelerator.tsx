@@ -77,9 +77,12 @@ const Accelerator: React.FC = () => {
                     whileHover={{ y: -5, backgroundColor: "rgba(255, 133, 27, 0.02)" }}
                     className="p-6 bg-white/40 backdrop-blur-sm border border-gray-100 rounded-2xl shadow-sm group transition-all"
                   >
-                    <div className="w-10 h-10 bg-vf-orange/10 text-vf-orange rounded-xl flex items-center justify-center mb-4 group-hover:bg-vf-orange group-hover:text-white transition-all">
+                    <motion.div 
+                      whileHover={{ scale: 1.2, rotate: 10 }}
+                      className="w-12 h-12 bg-vf-orange/10 text-vf-orange rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 shadow-md border-2 border-transparent group-hover:border-vf-orange/30 group-hover:bg-vf-orange/20"
+                    >
                       {item.icon}
-                    </div>
+                    </motion.div>
                     <h3 className="font-bold text-vf-blue mb-2 group-hover:text-vf-orange transition-colors">{item.title}</h3>
                     <p className="text-gray-500 text-xs leading-relaxed">{item.desc}</p>
                   </motion.div>

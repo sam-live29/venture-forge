@@ -363,10 +363,10 @@ const Home: React.FC = () => {
                 </div>
                 
                 <motion.div 
-                  animate={hoveredFeature === i ? { scale: [1, 1.1, 1] } : { scale: 1 }}
-                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                  animate={hoveredFeature === i ? { scale: 1.15, rotate: 10 } : { scale: 1, rotate: 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
                   className={`flex-shrink-0 mb-6 p-3 rounded-xl shadow-sm transition-all duration-300 w-fit relative z-10 ${
-                    hoveredFeature === i ? 'bg-vf-blue text-white' : 'bg-white text-vf-blue'
+                    hoveredFeature === i ? 'bg-vf-blue text-white shadow-vf-blue/20' : 'bg-white text-vf-blue'
                   }`}
                 >
                   {item.icon}
