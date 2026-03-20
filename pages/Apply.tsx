@@ -108,11 +108,11 @@ ${formData.whyVentureForge}
 
   if (!role) {
     return (
-      <div className="animate-in fade-in zoom-in duration-500 min-h-[85vh] flex flex-col items-center justify-start md:justify-center px-4 pt-[95px] md:pt-0 bg-transparent">
-        <div className="max-w-2xl w-full text-center mb-8 md:mb-14">
-          <div className="inline-block px-8 py-6 bg-white/40 backdrop-blur-md border border-white/50 rounded-[2rem] shadow-sm mb-6">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-vf-blue mb-2 tracking-tight">Choose Your Path</h1>
-            <p className="text-xs md:text-base lg:text-lg text-gray-600 font-medium">Are you applying as a primary founder or as a co-founder?</p>
+      <div className="animate-in fade-in zoom-in duration-500 min-h-[85vh] flex flex-col items-center justify-start md:justify-center px-4 pt-[88px] md:pt-0 bg-transparent">
+        <div className="max-w-2xl w-full text-center mb-6 md:mb-14">
+          <div className="inline-block px-8 py-4 bg-white/40 backdrop-blur-md border border-white/50 rounded-[2rem] shadow-sm mb-4">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-vf-blue mb-1 tracking-tight">Choose Your Path</h1>
+            <p className="text-[10px] md:text-base lg:text-lg text-gray-600 font-medium">Are you applying as a primary founder or as a co-founder?</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
