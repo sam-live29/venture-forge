@@ -356,7 +356,7 @@ const Home: React.FC = () => {
                 whileHover={{ y: -8, transition: { duration: 0.2 } }}
                 onMouseEnter={() => setHoveredFeature(i)}
                 onMouseLeave={() => setHoveredFeature(null)}
-                className="group relative bg-gray-50/50 p-8 rounded-2xl border border-gray-200 hover:border-vf-orange hover:bg-white hover:shadow-xl transition-all duration-300 overflow-hidden"
+                className="group relative bg-white p-8 rounded-3xl border border-gray-200 hover:border-vf-orange/60 hover:shadow-2xl transition-all duration-300 overflow-hidden"
               >
                 <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-10 transition-opacity">
                   <div className="w-24 h-24 bg-vf-orange rounded-full -mr-12 -mt-12"></div>
@@ -379,7 +379,7 @@ const Home: React.FC = () => {
                 
                 <p className="text-gray-500 text-xs leading-relaxed group-hover:text-gray-600 transition-colors">{item.desc}</p>
                 
-                <div className="mt-6 pt-6 border-t border-gray-200 flex items-center text-[9px] font-black text-gray-300 uppercase tracking-widest group-hover:text-vf-blue transition-colors">
+                <div className="mt-6 pt-6 border-t border-gray-100 flex items-center text-[9px] font-black text-gray-300 uppercase tracking-widest group-hover:text-vf-blue transition-colors">
                   <span>Learn More</span>
                   <ArrowRight className="ml-2 w-3 h-3 group-hover:translate-x-1 transition-transform" />
                 </div>
