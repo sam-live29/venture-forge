@@ -21,7 +21,7 @@ const Home: React.FC = () => {
   return (
     <div className="overflow-hidden">
       {/* Hero Section */}
-      <section className="relative pt-12 pb-16 lg:pt-20 lg:pb-32 bg-transparent overflow-hidden">
+      <section className="relative pt-6 pb-12 lg:pt-10 lg:pb-24 bg-transparent overflow-hidden">
         {/* Advanced Hero Illustration / Background */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <motion.div 

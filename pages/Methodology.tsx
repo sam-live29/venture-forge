@@ -56,7 +56,7 @@ const Methodology: React.FC = () => {
             ].map((pillar, i) => (
               <motion.div 
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
@@ -229,8 +229,8 @@ const Methodology: React.FC = () => {
                   }}
                   className="absolute inset-0 rounded-full border-2 border-dashed flex flex-col items-center justify-start pt-8 cursor-help transition-colors group/tam"
                 >
-                  <span className={`text-xs font-black tracking-[0.2em] transition-colors ${hoveredMarket === 'TAM' ? 'text-vf-blue' : 'text-vf-blue/40'}`}>TAM</span>
-                  <span className={`text-sm font-bold mt-1 transition-colors ${hoveredMarket === 'TAM' ? 'text-vf-blue' : 'text-vf-blue/60'}`}>Global Startup Ecosystem</span>
+                  <span className={`text-[10px] md:text-xs font-black tracking-[0.2em] transition-colors ${hoveredMarket === 'TAM' ? 'text-vf-blue' : 'text-vf-blue/40'}`}>TAM</span>
+                  <span className={`text-xs md:text-sm font-bold mt-1 transition-colors text-center px-4 ${hoveredMarket === 'TAM' ? 'text-vf-blue' : 'text-vf-blue/60'}`}>Global Startup Ecosystem</span>
                 </motion.div>
                 
                 {/* SAM */}
@@ -248,8 +248,8 @@ const Methodology: React.FC = () => {
                   }}
                   className="absolute inset-[15%] rounded-full border-2 border-dashed flex flex-col items-center justify-start pt-8 cursor-help transition-colors group/sam z-10"
                 >
-                  <span className={`text-xs font-black tracking-[0.2em] transition-colors ${hoveredMarket === 'SAM' ? 'text-vf-orange' : 'text-vf-orange/60'}`}>SAM</span>
-                  <span className={`text-sm font-bold mt-1 transition-colors ${hoveredMarket === 'SAM' ? 'text-vf-orange' : 'text-vf-orange/80'}`}>High-Growth Tech</span>
+                  <span className={`text-[10px] md:text-sm font-black tracking-[0.2em] transition-colors ${hoveredMarket === 'SAM' ? 'text-vf-orange' : 'text-vf-orange/60'}`}>SAM</span>
+                  <span className={`text-[10px] md:text-sm font-bold mt-1 transition-colors text-center px-4 leading-tight ${hoveredMarket === 'SAM' ? 'text-vf-orange' : 'text-vf-orange/80'}`}>High-Growth Tech</span>
                 </motion.div>
                 
                 {/* SOM */}
@@ -267,8 +267,8 @@ const Methodology: React.FC = () => {
                   }}
                   className="absolute inset-[35%] rounded-full shadow-2xl flex flex-col items-center justify-center text-center p-4 cursor-help group/som z-20"
                 >
-                  <span className="text-xs font-black text-white tracking-[0.2em] mb-1">SOM</span>
-                  <span className="text-xs font-bold text-blue-100 leading-tight">Venture Forge Portfolio</span>
+                  <span className="text-[10px] md:text-sm font-black text-white tracking-[0.2em] mb-1">SOM</span>
+                  <span className="text-[10px] md:text-sm font-bold text-blue-100 leading-tight text-center px-2">Venture Forge Portfolio</span>
                 </motion.div>
 
                 {/* Dynamic Precision Proximity Captions - Desktop */}
@@ -289,7 +289,7 @@ const Methodology: React.FC = () => {
                         initial={{ opacity: 0, x: 10, scale: 0.95 }}
                         animate={{ opacity: 1, x: 0, scale: 1 }}
                         exit={{ opacity: 0, x: 10, scale: 0.95 }}
-                        className="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-gray-100 text-left w-full relative"
+                        className="bg-white p-6 rounded-2xl shadow-2xl border border-gray-100 text-left w-full relative"
                       >
                         {/* Pointing Shape/Notch */}
                         <div className="hidden lg:block absolute top-1/2 -left-2.5 -translate-y-1/2 w-5 h-5 bg-white rotate-45 border-l border-b border-gray-100/50 z-0"></div>
