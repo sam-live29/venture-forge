@@ -8,7 +8,7 @@ const Team: React.FC = () => {
   return (
     <div className="bg-white selection:bg-vf-orange/30">
       {/* Hero Section */}
-      <section className="relative pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden border-b border-gray-100">
+      <section className="relative pt-6 pb-4 md:pt-8 md:pb-6 overflow-hidden border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -27,7 +27,7 @@ const Team: React.FC = () => {
       </section>
 
       {/* Core Team */}
-      <section className="py-24">
+      <section className="pt-8 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
             {[
@@ -92,7 +92,7 @@ const Team: React.FC = () => {
       </section>
 
       {/* Mentors & Advisors */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-vf-orange mb-4">The Network</h2>
@@ -120,7 +120,7 @@ const Team: React.FC = () => {
       </section>
 
       {/* Philosophy About Team */}
-      <section className="py-24">
+      <section className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="space-y-8">
             <h2 className="text-3xl font-bold text-vf-blue">Our Philosophy About Team</h2>
@@ -135,7 +135,7 @@ const Team: React.FC = () => {
       </section>
 
       {/* Open Call */}
-      <section className="py-24 bg-vf-blue text-white">
+      <section className="py-16 bg-vf-blue text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white/5 border border-white/10 rounded-3xl p-12 md:p-20 text-center relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-vf-orange/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
@@ -157,7 +157,7 @@ const Team: React.FC = () => {
       </section>
 
       {/* Culture Snapshot */}
-      <section className="py-24">
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[

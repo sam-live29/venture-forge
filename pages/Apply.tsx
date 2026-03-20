@@ -97,7 +97,10 @@ Why Startup OS?
 ${formData.whyVentureForge}
     `.trim();
 
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=ventureforge.corp@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const gmailUrl = isMobile 
+      ? `mailto:ventureforge.corp@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+      : `https://mail.google.com/mail/?view=cm&fs=1&to=ventureforge.corp@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     
     window.open(gmailUrl, '_blank');
   };
@@ -154,7 +157,7 @@ ${formData.whyVentureForge}
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 bg-transparent">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
         <button 
           onClick={() => setRole(null)}
           className="mb-6 text-xs text-gray-500 hover:text-vf-blue flex items-center transition-colors"

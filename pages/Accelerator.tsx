@@ -8,7 +8,7 @@ import { Users, Zap, TrendingUp, Globe, ArrowRight, CheckCircle2 } from 'lucide-
 const Accelerator: React.FC = () => {
   return (
     <div className="animate-in fade-in duration-500 bg-transparent">
-      <header className="py-12 md:py-16 bg-vf-blue text-white overflow-hidden relative">
+      <header className="pt-6 pb-12 md:pt-8 md:pb-16 bg-vf-blue text-white overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="inline-block px-3 py-1 bg-vf-orange text-white text-[10px] font-bold uppercase tracking-widest mb-4">The Flagship Program</div>
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">Startup OS</h1>

@@ -10,96 +10,32 @@ const Methodology: React.FC = () => {
   return (
     <div className="bg-white selection:bg-vf-orange/30">
       {/* Hero Section */}
-      <section className="relative pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden border-b border-gray-100">
+      <section className="relative pt-6 pb-12 md:pt-8 md:pb-16 overflow-hidden border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <h1 className="text-5xl md:text-7xl font-black text-vf-blue leading-[0.9] tracking-tighter mb-8">
-                  OUR <br />
-                  <span className="text-vf-orange italic">METHODOLOGY</span>
-                </h1>
-                <p className="text-xl text-gray-600 leading-relaxed max-w-xl font-light">
-                  A structured, execution-first approach to building real startups. We eliminate guesswork and replace it with systems.
-                </p>
-              </motion.div>
-            </div>
-            <div className="relative">
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-                className="relative z-10"
-              >
-                {/* TAM/SAM/SOM Market Visualization */}
-                <div className="relative h-64 flex items-center justify-center">
-                  {/* TAM */}
-                  <motion.div 
-                    onMouseEnter={() => setHoveredMarket('TAM')}
-                    onMouseLeave={() => setHoveredMarket(null)}
-                    whileHover={{ scale: 1.02 }}
-                    className="absolute w-64 h-64 rounded-full border border-vf-blue/20 bg-vf-blue/5 flex items-start justify-center pt-4 cursor-help transition-colors hover:bg-vf-blue/10"
-                  >
-                    <span className="text-[10px] font-black uppercase tracking-widest text-vf-blue/40">TAM</span>
-                  </motion.div>
-                  {/* SAM */}
-                  <motion.div 
-                    onMouseEnter={() => setHoveredMarket('SAM')}
-                    onMouseLeave={() => setHoveredMarket(null)}
-                    whileHover={{ scale: 1.05 }}
-                    className="absolute w-44 h-44 rounded-full border border-vf-orange/30 bg-vf-orange/5 flex items-start justify-center pt-4 cursor-help transition-colors hover:bg-vf-orange/10 z-10"
-                  >
-                    <span className="text-[10px] font-black uppercase tracking-widest text-vf-orange/60">SAM</span>
-                  </motion.div>
-                  {/* SOM */}
-                  <motion.div 
-                    onMouseEnter={() => setHoveredMarket('SOM')}
-                    onMouseLeave={() => setHoveredMarket(null)}
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    className="absolute w-24 h-24 rounded-full bg-vf-blue shadow-lg flex items-center justify-center text-center p-2 cursor-help z-20"
-                  >
-                    <span className="text-[10px] font-black uppercase tracking-widest text-white leading-tight">SOM</span>
-                  </motion.div>
-                  
-                  {/* Floating Info Overlay */}
-                  <AnimatePresence>
-                    {hoveredMarket && (
-                      <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white border border-gray-100 shadow-xl rounded-xl p-3 z-30 min-w-[200px] text-center"
-                      >
-                        <div className="flex items-center justify-center gap-2 mb-1">
-                          <Info className="w-3 h-3 text-vf-orange" />
-                          <span className="text-[10px] font-black text-vf-blue uppercase tracking-tighter">
-                            {hoveredMarket === 'TAM' ? 'Total Addressable' : hoveredMarket === 'SAM' ? 'Serviceable Addressable' : 'Serviceable Obtainable'}
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-gray-500 leading-tight">
-                          {hoveredMarket === 'TAM' && 'The entire $3T+ global startup ecosystem.'}
-                          {hoveredMarket === 'SAM' && 'High-growth tech ventures in our domains.'}
-                          {hoveredMarket === 'SOM' && 'The 10-12 elite startups we build annually.'}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </motion.div>
-              <div className="absolute -top-10 -right-10 w-64 h-64 bg-vf-orange/10 rounded-full blur-3xl -z-10"></div>
-              <div className="absolute -bottom-10 -left-10 w-64 h-64 bg-vf-blue/10 rounded-full blur-3xl -z-10"></div>
-            </div>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="max-w-3xl"
+          >
+            <h1 className="text-5xl md:text-7xl font-black text-vf-blue leading-[0.9] tracking-tighter mb-8">
+              OUR <br />
+              <span className="text-vf-orange italic">METHODOLOGY</span>
+            </h1>
+            <p className="text-xl text-gray-600 leading-relaxed font-light">
+              A structured, execution-first approach to building real startups. We eliminate guesswork and replace it with systems.
+            </p>
+          </motion.div>
         </div>
       </section>
 
       {/* Core Philosophy */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-vf-orange mb-4">Our Values</h2>
+            <h3 className="text-3xl font-bold text-vf-blue tracking-tight">Core Philosophy</h3>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
@@ -138,14 +74,17 @@ const Methodology: React.FC = () => {
       </section>
 
       {/* The Venture Forge Process */}
-      <section className="py-24">
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
+          <div className="text-center mb-12">
             <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-vf-orange mb-4">The Main Section</h2>
-            <h3 className="text-4xl font-bold text-vf-blue tracking-tight">The Venture Forge Process</h3>
+            <h3 className="text-3xl font-bold text-vf-blue tracking-tight">The Venture Forge Process</h3>
           </div>
 
-          <div className="space-y-12">
+          <div className="relative space-y-12">
+            {/* Timeline Connector Line */}
+            <div className="absolute left-[88px] top-6 bottom-6 w-0.5 bg-gray-100 hidden lg:block"></div>
+
             {[
               {
                 step: "01",
@@ -188,13 +127,18 @@ const Methodology: React.FC = () => {
                 initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="flex flex-col md:flex-row items-center gap-8 bg-gray-50/50 p-8 rounded-3xl border border-gray-100"
+                whileHover={{ y: -5, borderColor: 'rgba(255, 99, 33, 0.3)', scale: 1.01 }}
+                className="relative flex flex-col md:flex-row items-center gap-8 bg-gray-50/50 p-8 rounded-3xl border border-gray-100 transition-all duration-300 z-10 hover:bg-white hover:shadow-xl group"
               >
-                <div className="text-6xl font-black text-vf-blue/10 shrink-0">{item.step}</div>
-                <div className="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center text-vf-orange shrink-0">
-                  {item.icon}
-                </div>
-                <div className="flex-grow">
+                <div className="text-7xl font-black text-vf-blue/20 shrink-0 select-none group-hover:text-vf-blue/30 transition-colors">{item.step}</div>
+                <motion.div 
+                  whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1, transition: { duration: 0.5 } }}
+                  className="w-20 h-20 bg-vf-orange/5 rounded-3xl shadow-sm flex items-center justify-center text-vf-orange shrink-0 border border-vf-orange/10 mb-4 md:mb-0"
+                >
+                  {/* Icon size increased */}
+                  {React.cloneElement(item.icon as React.ReactElement, { className: 'w-10 h-10' })}
+                </motion.div>
+                <div className="flex-grow text-center md:text-left">
                   <h4 className="text-2xl font-bold text-vf-blue mb-2">{item.title}</h4>
                   <p className="text-vf-orange font-bold text-sm mb-4 italic">{item.desc}</p>
                   <p className="text-gray-600 text-sm leading-relaxed max-w-2xl">{item.detail}</p>
@@ -206,7 +150,7 @@ const Methodology: React.FC = () => {
       </section>
 
       {/* Comparison Section */}
-      <section className="py-24 bg-vf-blue text-white">
+      <section className="py-16 bg-vf-blue text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold tracking-tight">What Makes Us Different</h2>
@@ -260,7 +204,7 @@ const Methodology: React.FC = () => {
       </section>
 
       {/* Market Opportunity (TAM/SAM/SOM) */}
-      <section className="py-24 overflow-hidden bg-gray-50">
+      <section className="py-16 overflow-hidden bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-vf-orange mb-4">Market Opportunity</h2>
@@ -278,11 +222,15 @@ const Methodology: React.FC = () => {
                   viewport={{ once: true }}
                   onMouseEnter={() => setHoveredMarket('TAM')}
                   onMouseLeave={() => setHoveredMarket(null)}
-                  whileHover={{ scale: 1.02, backgroundColor: 'rgba(10, 10, 10, 0.08)' }}
-                  className="absolute inset-0 rounded-full border-2 border-dashed border-vf-blue/20 bg-vf-blue/5 flex flex-col items-center justify-start pt-8 cursor-help transition-colors group/tam"
+                  animate={{ 
+                    scale: hoveredMarket === 'TAM' ? 1.05 : 1,
+                    backgroundColor: hoveredMarket === 'TAM' ? 'rgba(10, 10, 10, 0.08)' : 'rgba(10, 10, 10, 0.05)',
+                    borderColor: hoveredMarket === 'TAM' ? 'rgba(10, 10, 10, 0.3)' : 'rgba(10, 10, 10, 0.1)'
+                  }}
+                  className="absolute inset-0 rounded-full border-2 border-dashed flex flex-col items-center justify-start pt-8 cursor-help transition-colors group/tam"
                 >
-                  <span className="text-xs font-black text-vf-blue/40 tracking-[0.2em]">TAM</span>
-                  <span className="text-sm font-bold text-vf-blue/60 mt-1">Global Startup Ecosystem</span>
+                  <span className={`text-xs font-black tracking-[0.2em] transition-colors ${hoveredMarket === 'TAM' ? 'text-vf-blue' : 'text-vf-blue/40'}`}>TAM</span>
+                  <span className={`text-sm font-bold mt-1 transition-colors ${hoveredMarket === 'TAM' ? 'text-vf-blue' : 'text-vf-blue/60'}`}>Global Startup Ecosystem</span>
                 </motion.div>
                 
                 {/* SAM */}
@@ -293,11 +241,15 @@ const Methodology: React.FC = () => {
                   transition={{ delay: 0.2 }}
                   onMouseEnter={() => setHoveredMarket('SAM')}
                   onMouseLeave={() => setHoveredMarket(null)}
-                  whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 99, 33, 0.08)' }}
-                  className="absolute inset-[15%] rounded-full border-2 border-dashed border-vf-orange/30 bg-vf-orange/5 flex flex-col items-center justify-start pt-8 cursor-help transition-colors group/sam z-10"
+                  animate={{ 
+                    scale: hoveredMarket === 'SAM' ? 1.08 : 1,
+                    backgroundColor: hoveredMarket === 'SAM' ? 'rgba(255, 99, 33, 0.12)' : 'rgba(255, 99, 33, 0.05)',
+                    borderColor: hoveredMarket === 'SAM' ? 'rgba(255, 99, 33, 0.5)' : 'rgba(255, 99, 33, 0.2)'
+                  }}
+                  className="absolute inset-[15%] rounded-full border-2 border-dashed flex flex-col items-center justify-start pt-8 cursor-help transition-colors group/sam z-10"
                 >
-                  <span className="text-xs font-black text-vf-orange/60 tracking-[0.2em]">SAM</span>
-                  <span className="text-sm font-bold text-vf-orange/80 mt-1">High-Growth Tech</span>
+                  <span className={`text-xs font-black tracking-[0.2em] transition-colors ${hoveredMarket === 'SAM' ? 'text-vf-orange' : 'text-vf-orange/60'}`}>SAM</span>
+                  <span className={`text-sm font-bold mt-1 transition-colors ${hoveredMarket === 'SAM' ? 'text-vf-orange' : 'text-vf-orange/80'}`}>High-Growth Tech</span>
                 </motion.div>
                 
                 {/* SOM */}
@@ -308,43 +260,55 @@ const Methodology: React.FC = () => {
                   transition={{ delay: 0.4 }}
                   onMouseEnter={() => setHoveredMarket('SOM')}
                   onMouseLeave={() => setHoveredMarket(null)}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  className="absolute inset-[35%] rounded-full bg-vf-blue shadow-2xl flex flex-col items-center justify-center text-center p-4 cursor-help group/som z-20"
+                  animate={{ 
+                    scale: hoveredMarket === 'SOM' ? 1.15 : 1,
+                    rotate: hoveredMarket === 'SOM' ? 5 : 0,
+                    backgroundColor: hoveredMarket === 'SOM' ? '#0f172a' : '#0a0a0a'
+                  }}
+                  className="absolute inset-[35%] rounded-full shadow-2xl flex flex-col items-center justify-center text-center p-4 cursor-help group/som z-20"
                 >
                   <span className="text-xs font-black text-white tracking-[0.2em] mb-1">SOM</span>
                   <span className="text-xs font-bold text-blue-100 leading-tight">Venture Forge Portfolio</span>
                 </motion.div>
 
-                {/* Unified Hover Info Overlay - Always on Top */}
-                <AnimatePresence>
-                  {hoveredMarket && (
-                    <motion.div 
-                      initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                      className="absolute inset-0 z-50 flex items-center justify-center pointer-events-none p-8"
-                    >
-                      <div className="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-2xl border border-gray-100 text-center max-w-[280px]">
-                        <div className="flex items-center justify-center gap-2 mb-2">
-                          <div className={`w-2 h-2 rounded-full ${hoveredMarket === 'TAM' ? 'bg-vf-blue' : hoveredMarket === 'SAM' ? 'bg-vf-orange' : 'bg-emerald-500'}`}></div>
-                          <span className={`text-[10px] font-black uppercase tracking-widest ${hoveredMarket === 'TAM' ? 'text-vf-blue' : hoveredMarket === 'SAM' ? 'text-vf-orange' : 'text-emerald-500'}`}>
+                {/* Dynamic Precision Proximity Captions - Desktop */}
+                <div className={`absolute lg:w-80 left-1/2 -translate-x-1/2 -bottom-32 w-full max-w-[320px] h-32 flex items-center justify-center pointer-events-none z-50 transition-all duration-500 ease-out ${
+                  hoveredMarket === 'TAM' ? 'lg:top-[0%] lg:left-[101%]' : 
+                  hoveredMarket === 'SAM' ? 'lg:top-[15%] lg:left-[86%]' : 
+                  hoveredMarket === 'SOM' ? 'lg:top-[35%] lg:left-[66%]' : 
+                  'lg:top-[50%] lg:left-[101%]'
+                }`}
+                  style={{ 
+                    transform: hoveredMarket ? 'none' : 'translateY(20px)'
+                  }}
+                >
+                  <AnimatePresence mode="wait">
+                    {hoveredMarket && (
+                      <motion.div 
+                        key={hoveredMarket}
+                        initial={{ opacity: 0, x: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                        exit={{ opacity: 0, x: 10, scale: 0.95 }}
+                        className="bg-white/95 backdrop-blur-md p-6 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-gray-100 text-left w-full relative"
+                      >
+                        {/* Pointing Shape/Notch */}
+                        <div className="hidden lg:block absolute top-1/2 -left-2.5 -translate-y-1/2 w-5 h-5 bg-white rotate-45 border-l border-b border-gray-100/50 z-0"></div>
+                        
+                        <div className="flex items-center gap-2 mb-3 relative z-10">
+                          <div className={`w-2.5 h-2.5 rounded-full ${hoveredMarket === 'TAM' ? 'bg-vf-blue' : hoveredMarket === 'SAM' ? 'bg-vf-orange' : 'bg-vf-blue'}`}></div>
+                          <span className={`text-[11px] font-black uppercase tracking-widest ${hoveredMarket === 'TAM' ? 'text-vf-blue' : hoveredMarket === 'SAM' ? 'text-vf-orange' : 'text-vf-blue'}`}>
                             {hoveredMarket === 'TAM' ? 'Total Addressable' : hoveredMarket === 'SAM' ? 'Serviceable Addressable' : 'Serviceable Obtainable'}
                           </span>
                         </div>
-                        <p className="text-sm font-bold text-vf-blue mb-2">
-                          {hoveredMarket === 'TAM' && 'Global Startup Ecosystem'}
-                          {hoveredMarket === 'SAM' && 'High-Growth Tech Ventures'}
-                          {hoveredMarket === 'SOM' && 'Venture Forge Portfolio'}
-                        </p>
-                        <p className="text-xs text-gray-600 leading-relaxed">
+                        <p className="text-sm text-gray-600 leading-relaxed font-medium relative z-10">
                           {hoveredMarket === 'TAM' && 'Every startup, founder, and innovation project globally. The $3T+ ecosystem of potential builders.'}
                           {hoveredMarket === 'SAM' && 'Venture-scale software and hardware companies in our core domains where we have deep operator expertise.'}
                           {hoveredMarket === 'SOM' && 'The specific 10-12 elite startups we build each year with 100% focus and direct operational support.'}
                         </p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             </div>
             
@@ -355,9 +319,12 @@ const Methodology: React.FC = () => {
                   onMouseLeave={() => setHoveredMarket(null)}
                   className={`flex items-start gap-4 p-4 rounded-2xl transition-all group/item cursor-pointer ${hoveredMarket === 'TAM' ? 'bg-white shadow-md' : 'hover:bg-white hover:shadow-md'}`}
                 >
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-1 transition-colors ${hoveredMarket === 'TAM' ? 'bg-vf-blue text-white' : 'bg-vf-blue/10 group-hover/item:bg-vf-blue group-hover/item:text-white'}`}>
+                  <motion.div 
+                    animate={hoveredMarket === 'TAM' ? { scale: [1, 1.1, 1], transition: { repeat: Infinity, duration: 2 } } : { scale: 1 }}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-1 transition-colors ${hoveredMarket === 'TAM' ? 'bg-vf-blue text-white' : 'bg-vf-blue/10 group-hover/item:bg-vf-blue group-hover/item:text-white'}`}
+                  >
                     <div className={`w-2 h-2 rounded-full transition-colors ${hoveredMarket === 'TAM' ? 'bg-white' : 'bg-vf-blue group-hover/item:bg-white'}`}></div>
-                  </div>
+                  </motion.div>
                   <div>
                     <h4 className="text-lg font-bold text-vf-blue">TAM (Total Addressable Market)</h4>
                     <p className="text-gray-600 text-sm">The entire global startup market, representing the total demand for innovation and new venture creation.</p>
@@ -372,9 +339,12 @@ const Methodology: React.FC = () => {
                   onMouseLeave={() => setHoveredMarket(null)}
                   className={`flex items-start gap-4 p-4 rounded-2xl transition-all group/item cursor-pointer ${hoveredMarket === 'SAM' ? 'bg-white shadow-md' : 'hover:bg-white hover:shadow-md'}`}
                 >
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-1 transition-colors ${hoveredMarket === 'SAM' ? 'bg-vf-orange text-white' : 'bg-vf-orange/10 group-hover/item:bg-vf-orange group-hover/item:text-white'}`}>
+                  <motion.div 
+                    animate={hoveredMarket === 'SAM' ? { scale: [1, 1.1, 1], transition: { repeat: Infinity, duration: 2 } } : { scale: 1 }}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-1 transition-colors ${hoveredMarket === 'SAM' ? 'bg-vf-orange text-white' : 'bg-vf-orange/10 group-hover/item:bg-vf-orange group-hover/item:text-white'}`}
+                  >
                     <div className={`w-2 h-2 rounded-full transition-colors ${hoveredMarket === 'SAM' ? 'bg-white' : 'bg-vf-orange group-hover/item:bg-white'}`}></div>
-                  </div>
+                  </motion.div>
                   <div>
                     <h4 className="text-lg font-bold text-vf-blue">SAM (Serviceable Addressable Market)</h4>
                     <p className="text-gray-600 text-sm">The segment of high-growth technology ventures that align with our operational expertise and infrastructure.</p>
@@ -389,9 +359,12 @@ const Methodology: React.FC = () => {
                   onMouseLeave={() => setHoveredMarket(null)}
                   className={`flex items-start gap-4 p-4 rounded-2xl transition-all group/item cursor-pointer ${hoveredMarket === 'SOM' ? 'bg-white shadow-md' : 'hover:bg-white hover:shadow-md'}`}
                 >
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-1 transition-colors ${hoveredMarket === 'SOM' ? 'bg-vf-orange' : 'bg-vf-blue group-hover/item:bg-vf-orange'}`}>
+                  <motion.div 
+                    animate={hoveredMarket === 'SOM' ? { scale: [1, 1.1, 1], transition: { repeat: Infinity, duration: 2 } } : { scale: 1 }}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-1 transition-colors ${hoveredMarket === 'SOM' ? 'bg-vf-orange' : 'bg-vf-blue group-hover/item:bg-vf-orange'}`}
+                  >
                     <div className="w-2 h-2 rounded-full bg-white"></div>
-                  </div>
+                  </motion.div>
                   <div>
                     <h4 className="text-lg font-bold text-vf-blue">SOM (Serviceable Obtainable Market)</h4>
                     <p className="text-gray-600 text-sm">The specific portfolio of companies we actively build and scale through our execution-first methodology.</p>
@@ -413,7 +386,7 @@ const Methodology: React.FC = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-24 border-t border-gray-100">
+      <section className="py-16 border-t border-gray-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-5xl font-bold text-vf-blue mb-8 tracking-tight">
             If you’re serious about building, <br />

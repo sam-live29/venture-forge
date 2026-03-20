@@ -106,8 +106,12 @@ const Partners: React.FC = () => {
       `Partnership Goals:\n${formData.goals}`
     );
     
-    // Open Gmail compose window
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=partnerships.ventureforge@gmail.com&su=${subject}&body=${body}`;
+    // Open Gmail compose window based on device
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const gmailUrl = isMobile
+      ? `mailto:partnerships.ventureforge@gmail.com?subject=${subject}&body=${body}`
+      : `https://mail.google.com/mail/?view=cm&fs=1&to=partnerships.ventureforge@gmail.com&su=${subject}&body=${body}`;
+      
     window.open(gmailUrl, '_blank');
     
     setSubmitted(true);
@@ -132,7 +136,7 @@ const Partners: React.FC = () => {
   return (
     <div className="animate-in fade-in duration-700 bg-transparent">
       {/* Header Section */}
-      <header className="relative py-12 md:py-16 bg-transparent border-b border-gray-100 overflow-hidden">
+      <header className="relative pt-6 pb-12 md:pt-8 md:pb-16 bg-transparent border-b border-gray-100 overflow-hidden">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gray-50/50 skew-x-12 translate-x-1/4 pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 text-vf-blue text-[10px] font-bold uppercase tracking-wider mb-4">

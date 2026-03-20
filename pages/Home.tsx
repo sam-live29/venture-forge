@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 
 const Home: React.FC = () => {
+  const [hoveredFeature, setHoveredFeature] = React.useState<number | null>(null);
+
   return (
     <div className="overflow-hidden">
       {/* Hero Section */}
@@ -103,7 +105,7 @@ const Home: React.FC = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <p className="text-xl text-gray-500 font-light leading-relaxed">
+              <p className="text-xl text-gray-500 font-light leading-relaxed lg:hidden">
                 We help early-stage founders validate ideas, execute fast, and access the right funding.
               </p>
             </motion.div>
@@ -200,7 +202,7 @@ const Home: React.FC = () => {
                 className="text-center relative z-10"
               >
                 <div className="w-20 h-20 bg-white border-2 border-gray-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg group hover:border-vf-orange transition-colors duration-500">
-                  <span className="text-3xl font-black text-gray-200 group-hover:text-vf-orange transition-colors duration-500">{step.num}</span>
+                  <span className="text-3xl font-black text-vf-orange transition-colors duration-500">{step.num}</span>
                 </div>
                 <h3 className="text-xl font-bold text-vf-blue mb-3">{step.title}</h3>
                 <p className="text-gray-600 mb-3 px-4 text-sm">{step.desc}</p>
@@ -288,38 +290,10 @@ const Home: React.FC = () => {
                 <h3 className="text-2xl font-black text-gray-300 mb-3 group-hover:text-vf-blue transition-all duration-300 relative z-10 group-hover:tracking-tight">{startup.name}</h3>
                 <p className="text-gray-400 text-sm mb-8 leading-relaxed h-12 overflow-hidden italic group-hover:text-gray-600 transition-colors relative z-10">{startup.desc}</p>
                 
-                <div className="space-y-4 pt-6 border-t border-gray-100 relative z-10">
-                  <div>
-                    <div className="flex justify-between text-[10px] font-black uppercase tracking-widest mb-2">
-                      <span className="text-gray-300 group-hover:text-vf-blue transition-colors">Execution Progress</span>
-                      <span className="text-gray-300 group-hover:text-vf-orange transition-colors">{startup.progress}</span>
-                    </div>
-                    <div className="h-1.5 w-full bg-gray-50 rounded-full overflow-hidden shadow-inner">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        whileInView={{ width: startup.progress }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1, delay: 0.5 }}
-                        className="h-full bg-gray-200 group-hover:bg-vf-orange transition-colors relative"
-                      >
-                        <div className="absolute inset-0 bg-white/20 animate-shimmer"></div>
-                      </motion.div>
-                    </div>
-                  </div>
-                  
-                  <div className="pt-2 flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] font-black text-gray-200 uppercase tracking-widest block mb-1 group-hover:text-vf-blue transition-colors">Next Milestone</span>
-                      <p className="text-xs font-bold text-gray-300 group-hover:text-gray-700 transition-colors">{startup.milestone}</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full border border-gray-100 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-4 group-hover:translate-x-0">
-                      <ArrowRight className="w-4 h-4 text-vf-orange" />
-                    </div>
-                  </div>
+                <div className="pt-6 border-t border-gray-100 relative z-10 text-center">
+                  <span className="text-[10px] font-black text-gray-200 uppercase tracking-widest block group-hover:text-vf-blue transition-colors mb-2">Available Slot</span>
+                  <p className="text-xs font-bold text-gray-300 group-hover:text-gray-600 transition-colors">Join the next cohort to fill this space.</p>
                 </div>
-                
-                {/* Bottom interactive bar */}
-                <div className="absolute bottom-0 left-0 w-full h-1.5 bg-vf-orange scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-700"></div>
               </motion.div>
             ))}
           </div>
@@ -380,15 +354,23 @@ const Home: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
                 whileHover={{ y: -8, transition: { duration: 0.2 } }}
+                onMouseEnter={() => setHoveredFeature(i)}
+                onMouseLeave={() => setHoveredFeature(null)}
                 className="group relative bg-gray-50/50 p-8 rounded-2xl border border-gray-100 hover:border-vf-orange hover:bg-white hover:shadow-xl transition-all duration-300 overflow-hidden"
               >
                 <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-10 transition-opacity">
                   <div className="w-24 h-24 bg-vf-orange rounded-full -mr-12 -mt-12"></div>
                 </div>
                 
-                <div className="flex-shrink-0 mb-6 p-3 bg-white text-vf-blue rounded-xl shadow-sm group-hover:bg-vf-blue group-hover:text-white transition-all duration-300 w-fit">
+                <motion.div 
+                  animate={hoveredFeature === i ? { scale: [1, 1.1, 1] } : { scale: 1 }}
+                  transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                  className={`flex-shrink-0 mb-6 p-3 rounded-xl shadow-sm transition-all duration-300 w-fit relative z-10 ${
+                    hoveredFeature === i ? 'bg-vf-blue text-white' : 'bg-white text-vf-blue'
+                  }`}
+                >
                   {item.icon}
-                </div>
+                </motion.div>
                 
                 <div className="mb-4">
                   <span className="text-[9px] font-black text-vf-orange uppercase tracking-[0.2em] mb-1 block">{item.tag}</span>

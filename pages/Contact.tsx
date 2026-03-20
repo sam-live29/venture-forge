@@ -20,7 +20,7 @@ const Contact: React.FC = () => {
   return (
     <div className="bg-white selection:bg-vf-orange/30">
       {/* Hero Section */}
-      <section className="relative pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden border-b border-gray-100">
+      <section className="relative pt-6 pb-24 md:pt-8 md:pb-32 overflow-hidden border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}

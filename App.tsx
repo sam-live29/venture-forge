@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center">
@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
               <img 
                 src="https://raw.githubusercontent.com/Venture-Forge/assets/main/logo.png" 
                 alt="Venture Forge" 
-                className="h-12 w-auto py-1"
+                className="h-10 md:h-12 w-auto py-1"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                   e.currentTarget.parentElement?.querySelector('.logo-text')?.classList.remove('hidden');
@@ -72,7 +72,7 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
 
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center ml-4">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-gray-600 hover:text-vf-blue focus:outline-none"
@@ -120,7 +120,7 @@ const App: React.FC = () => {
       <div className="min-h-screen flex flex-col bg-transparent">
         <ScrollToTop />
         <Navbar />
-        <main className="flex-grow">
+        <main className="flex-grow pt-20">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

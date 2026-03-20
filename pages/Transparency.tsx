@@ -7,46 +7,30 @@ const Transparency: React.FC = () => {
   return (
     <div className="animate-in fade-in duration-1000 bg-transparent selection:bg-vf-orange/30">
       {/* Hero Section - Explicit Left Alignment */}
-      <section className="relative pt-10 pb-20 md:pt-14 md:pb-32 flex items-center overflow-hidden border-b border-gray-100 bg-transparent">
+      <section className="relative pt-6 pb-20 md:pt-8 md:pb-32 flex items-center overflow-hidden border-b border-gray-100 bg-transparent">
         <div className="absolute inset-0 z-0">
           <div className="absolute top-[-10%] right-[-5%] w-[50%] h-[50%] rounded-full bg-vf-blue/5 blur-[120px]"></div>
           <div className="absolute bottom-[-10%] left-[-5%] w-[50%] h-[50%] rounded-full bg-vf-orange/5 blur-[120px]"></div>
         </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="max-w-2xl">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 text-vf-blue text-[10px] font-bold uppercase tracking-wider mb-4 border border-blue-100">
-                <Eye className="w-3 h-3 fill-current" />
-                <span>Full Disclosure</span>
-              </div>
-              <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-vf-blue leading-[0.9] tracking-tighter mb-8">
-                OUR <br />
-                <span className="text-vf-orange italic">VALUES</span>
-              </h1>
-              <div className="h-1.5 w-20 bg-vf-blue mb-8"></div>
-              <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-xl font-light">
-                Venture Forge operates with radical transparency. We believe alignment is the foundation of every successful venture. Our model is simple: we focus on outcomes.
-              </p>
-              <div className="mt-10 flex flex-wrap gap-4">
-                <div className="flex items-center space-x-2 text-vf-blue font-black text-[10px] uppercase tracking-[0.2em]">
-                  <ShieldCheck className="w-4 h-4 text-vf-orange" />
-                  <span>Verified Accountability</span>
-                </div>
-              </div>
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 text-vf-blue text-[10px] font-bold uppercase tracking-wider mb-4 border border-blue-100">
+              <Eye className="w-3 h-3 fill-current" />
+              <span>Full Disclosure</span>
             </div>
-            
-            {/* Right side visual element to emphasize the left-side content */}
-            <div className="hidden lg:block relative">
-              <div className="absolute -inset-4 bg-vf-blue/10 rounded-full blur-3xl animate-pulse"></div>
-              <div className="relative border border-white/20 bg-white/5 backdrop-blur-md p-4 rounded-2xl shadow-2xl transform -rotate-2 hover:rotate-0 transition-transform duration-500 overflow-hidden aspect-[4/3]">
-                <img 
-                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" 
-                  alt="Integrity and Clarity" 
-                  className="w-full h-full object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-700"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-vf-blue/5 pointer-events-none"></div>
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-vf-blue leading-[0.9] tracking-tighter mb-8">
+              OUR <br />
+              <span className="text-vf-orange italic">VALUES</span>
+            </h1>
+            <div className="h-1.5 w-20 bg-vf-blue mb-8"></div>
+            <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-xl font-light">
+              Venture Forge operates with radical transparency. We believe alignment is the foundation of every successful venture. Our model is simple: we focus on outcomes.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <div className="flex items-center space-x-2 text-vf-blue font-black text-[10px] uppercase tracking-[0.2em]">
+                <ShieldCheck className="w-4 h-4 text-vf-orange" />
+                <span>Verified Accountability</span>
               </div>
             </div>
           </div>
