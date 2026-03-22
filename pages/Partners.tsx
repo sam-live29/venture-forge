@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Building2, Briefcase, Users, PieChart, Globe, Mail, Clock, CheckCircle2, ChevronRight, Info, Rocket, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-
+import { insforge } from '../lib/insforge';
 const LabelWithTooltip: React.FC<{ label: string; tooltip: string }> = ({ label, tooltip }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -90,31 +90,30 @@ const Partners: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) {
       return;
     }
     
-    const subject = encodeURIComponent(`Partnership Inquiry: ${formData.organization}`);
-    const body = encodeURIComponent(
-      `Organization: ${formData.organization}\n` +
-      `Role / Title: ${formData.role}\n` +
-      `Interest Area: ${formData.interestArea}\n` +
-      `Official Email: ${formData.email}\n\n` +
-      `Partnership Goals:\n${formData.goals}`
-    );
-    
-    // Open Gmail compose window based on device
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const gmailUrl = isMobile
-      ? `mailto:partnerships.ventureforge@gmail.com?subject=${subject}&body=${body}`
-      : `https://mail.google.com/mail/?view=cm&fs=1&to=partnerships.ventureforge@gmail.com&su=${subject}&body=${body}`;
+    try {
+      const { error } = await insforge.database.from('partnerships').insert({
+        organization: formData.organization,
+        role: formData.role,
+        interest_area: formData.interestArea,
+        email: formData.email,
+        goals: formData.goals
+      });
       
-    window.open(gmailUrl, '_blank');
-    
-    setSubmitted(true);
+      if (error) throw error;
+      
+      setSubmitted(true);
+      window.scrollTo(0, 0);
+    } catch (err) {
+      console.error(err);
+      alert('There was an error submitting your inquiry. Please try again.');
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Mail, MessageSquare, Phone, MapPin, Send, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { Mail, MessageSquare, Phone, MapPin, Send, ArrowRight, ShieldCheck, Zap, CheckCircle2 } from 'lucide-react';
+import { insforge } from '../lib/insforge';
 
 const Contact: React.FC = () => {
   const [formState, setFormState] = useState({
@@ -11,10 +12,28 @@ const Contact: React.FC = () => {
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, this would send an email
-    alert('Thank you for your message. We will get back to you shortly.');
+    setIsSubmitting(true);
+    try {
+      const { error } = await insforge.database.from('contact_messages').insert({
+        name: formState.name,
+        email: formState.email,
+        subject: formState.subject,
+        message: formState.message
+      });
+      if (error) throw error;
+      setFormState({ name: '', email: '', subject: 'General Inquiry', message: '' });
+      setIsSubmitted(true);
+      window.scrollTo(0, 0);
+    } catch (err) {
+      alert('Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -97,7 +116,19 @@ const Contact: React.FC = () => {
             <div className="bg-white p-8 md:p-12 rounded-3xl border border-gray-100 shadow-xl relative overflow-hidden">
                <div className="absolute top-0 right-0 w-32 h-32 bg-vf-blue/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
               
-              <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+              {isSubmitted ? (
+                <div className="text-center py-12 relative z-10 animate-in fade-in zoom-in duration-500">
+                  <div className="w-16 h-16 bg-blue-50 text-vf-blue rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle2 className="w-8 h-8 text-vf-blue" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-vf-blue mb-4">Message Sent!</h3>
+                  <p className="text-gray-600 mb-8">Thank you for reaching out. We will get back to you shortly.</p>
+                  <button onClick={() => setIsSubmitted(false)} className="px-6 py-3 bg-vf-blue text-white text-xs font-black uppercase tracking-widest rounded-lg hover:bg-slate-800 transition-colors">
+                    Send Another
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Full Name</label>
@@ -157,6 +188,7 @@ const Contact: React.FC = () => {
                   <Send className="ml-3 w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                 </button>
               </form>
+              )}
             </div>
           </div>
         </div>
