@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Building2, Briefcase, Users, PieChart, Globe, Mail, Clock, CheckCircle2, ChevronRight, Info, Rocket, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { insforge } from '../lib/insforge';
+import { PartnershipSchema } from '../lib/schemas';
+import { z } from 'zod';
+import DOMPurify from 'dompurify';
+import { useRateLimit } from '../hooks/useRateLimit';
 const LabelWithTooltip: React.FC<{ label: string; tooltip: string }> = ({ label, tooltip }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -38,6 +42,7 @@ const LabelWithTooltip: React.FC<{ label: string; tooltip: string }> = ({ label,
 const Partners: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const { isRateLimited, timeLeft, trigger: triggerRateLimit } = useRateLimit('partners_form', 60);
   const [formData, setFormData] = useState({
     organization: "",
     role: "",
@@ -55,59 +60,51 @@ const Partners: React.FC = () => {
     other: "For other institutional or ecosystem partnership inquiries regarding Startup OS."
   };
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-    
-    if (!formData.organization.trim()) {
-      newErrors.organization = "Organization name is required";
-    }
-    
-    if (!formData.role.trim()) {
-      newErrors.role = "Your role/title is required";
-    }
-    
-    if (!formData.interestArea) {
-      newErrors.interestArea = "Please select an interest area";
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = "Official email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid official email";
-    }
-    
-    if (!formData.goals.trim()) {
-      newErrors.goals = "Please describe your partnership goals";
-    } else if (formData.goals.trim().length < 20) {
-      newErrors.goals = "Please provide a bit more detail (min 20 characters)";
-    }
-    
-    if (!formData.terms) {
-      newErrors.terms = "You must agree to the terms to proceed";
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) {
+    if (isRateLimited) {
+      alert(`Too many requests. Please wait ${timeLeft} seconds before submitting again.`);
       return;
+    }
+    
+    setErrors({});
+    
+    // Deep sanitize fields to prevent XSS string injections
+    const sanitizedData = {
+      organization: DOMPurify.sanitize(formData.organization),
+      role: DOMPurify.sanitize(formData.role),
+      interestArea: DOMPurify.sanitize(formData.interestArea),
+      email: DOMPurify.sanitize(formData.email),
+      goals: DOMPurify.sanitize(formData.goals),
+      terms: formData.terms
+    };
+    
+    try {
+      PartnershipSchema.parse(sanitizedData);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        const newErrors: Record<string, string> = {};
+        err.issues.forEach(issue => {
+          if (issue.path[0]) newErrors[issue.path[0] as string] = issue.message;
+        });
+        setErrors(newErrors);
+        return;
+      }
     }
     
     try {
       const { error } = await insforge.database.from('partnerships').insert({
-        organization: formData.organization,
-        role: formData.role,
-        interest_area: formData.interestArea,
-        email: formData.email,
-        goals: formData.goals
+        organization: sanitizedData.organization,
+        role: sanitizedData.role,
+        interest_area: sanitizedData.interestArea,
+        email: sanitizedData.email,
+        goals: sanitizedData.goals
       });
       
       if (error) throw error;
       
+      triggerRateLimit();
       setSubmitted(true);
       window.scrollTo(0, 0);
     } catch (err) {

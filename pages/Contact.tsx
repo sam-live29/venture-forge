@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Mail, MessageSquare, Phone, MapPin, Send, ArrowRight, ShieldCheck, Zap, CheckCircle2 } from 'lucide-react';
 import { insforge } from '../lib/insforge';
+import { ContactSchema } from '../lib/schemas';
+import { z } from 'zod';
+import DOMPurify from 'dompurify';
+import { useRateLimit } from '../hooks/useRateLimit';
 
 const Contact: React.FC = () => {
   const [formState, setFormState] = useState({
@@ -14,18 +18,46 @@ const Contact: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const { isRateLimited, timeLeft, trigger: triggerRateLimit } = useRateLimit('contact_form', 60);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (isRateLimited) {
+      alert(`Too many requests. Please wait ${timeLeft} seconds before submitting again.`);
+      return;
+    }
+    
+    setErrors({});
     setIsSubmitting(true);
+    
+    // Deep sanitize fields to prevent XSS string injections
+    const sanitizedData = {
+      name: DOMPurify.sanitize(formState.name),
+      email: DOMPurify.sanitize(formState.email),
+      subject: DOMPurify.sanitize(formState.subject),
+      message: DOMPurify.sanitize(formState.message)
+    };
+    
     try {
-      const { error } = await insforge.database.from('contact_messages').insert({
-        name: formState.name,
-        email: formState.email,
-        subject: formState.subject,
-        message: formState.message
-      });
+      ContactSchema.parse(sanitizedData);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        const newErrors: Record<string, string> = {};
+        err.issues.forEach(issue => {
+          if (issue.path[0]) newErrors[issue.path[0] as string] = issue.message;
+        });
+        setErrors(newErrors);
+        setIsSubmitting(false);
+        return;
+      }
+    }
+    
+    try {
+      const { error } = await insforge.database.from('contact_messages').insert(sanitizedData);
       if (error) throw error;
+      triggerRateLimit();
       setFormState({ name: '', email: '', subject: 'General Inquiry', message: '' });
       setIsSubmitted(true);
       window.scrollTo(0, 0);
@@ -136,10 +168,11 @@ const Contact: React.FC = () => {
                       type="text" 
                       required
                       placeholder="Arjun Sharma"
-                      className="w-full bg-gray-50 border border-gray-100 px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-vf-blue/50 focus:border-vf-blue transition-all"
+                      className={`w-full bg-gray-50 border px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-vf-blue/50 focus:border-vf-blue transition-all ${errors.name ? 'border-red-500' : 'border-gray-100'}`}
                       value={formState.name}
                       onChange={(e) => setFormState({...formState, name: e.target.value})}
                     />
+                    {errors.name && <p className="text-[10px] text-red-500 mt-1 font-bold">{errors.name}</p>}
                   </div>
                   <div>
                     <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Email Address</label>
@@ -147,17 +180,18 @@ const Contact: React.FC = () => {
                       type="email" 
                       required
                       placeholder="arjun@ventureforge.in"
-                      className="w-full bg-gray-50 border border-gray-100 px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-vf-blue/50 focus:border-vf-blue transition-all"
+                      className={`w-full bg-gray-50 border px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-vf-blue/50 focus:border-vf-blue transition-all ${errors.email ? 'border-red-500' : 'border-gray-100'}`}
                       value={formState.email}
                       onChange={(e) => setFormState({...formState, email: e.target.value})}
                     />
+                    {errors.email && <p className="text-[10px] text-red-500 mt-1 font-bold">{errors.email}</p>}
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Subject</label>
                   <select 
-                    className="w-full bg-gray-50 border border-gray-100 px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-vf-blue/50 focus:border-vf-blue transition-all"
+                    className={`w-full bg-gray-50 border px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-vf-blue/50 focus:border-vf-blue transition-all ${errors.subject ? 'border-red-500' : 'border-gray-100'}`}
                     value={formState.subject}
                     onChange={(e) => setFormState({...formState, subject: e.target.value})}
                   >
@@ -166,6 +200,7 @@ const Contact: React.FC = () => {
                     <option>Press & Media</option>
                     <option>Other</option>
                   </select>
+                  {errors.subject && <p className="text-[10px] text-red-500 mt-1 font-bold">{errors.subject}</p>}
                 </div>
 
                 <div>
@@ -174,10 +209,11 @@ const Contact: React.FC = () => {
                     required
                     rows={5}
                     placeholder="How can we help your venture?"
-                    className="w-full bg-gray-50 border border-gray-100 px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-vf-blue/50 focus:border-vf-blue transition-all resize-none"
+                    className={`w-full bg-gray-50 border px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-vf-blue/50 focus:border-vf-blue transition-all resize-none ${errors.message ? 'border-red-500' : 'border-gray-100'}`}
                     value={formState.message}
                     onChange={(e) => setFormState({...formState, message: e.target.value})}
                   ></textarea>
+                  {errors.message && <p className="text-[10px] text-red-500 mt-1 font-bold">{errors.message}</p>}
                 </div>
 
                 <button 

@@ -5,6 +5,8 @@ import { motion } from 'motion/react';
 import { insforge } from '../lib/insforge';
 import { ApplicationSchema } from '../lib/schemas';
 import { z } from 'zod';
+import DOMPurify from 'dompurify';
+import { useRateLimit } from '../hooks/useRateLimit';
 
 const Apply: React.FC = () => {
   const [role, setRole] = useState<'founder' | 'co-founder' | null>(null);
@@ -30,6 +32,7 @@ const Apply: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const { isRateLimited, timeLeft, trigger: triggerRateLimit } = useRateLimit('apply_form', 60);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -58,11 +61,43 @@ const Apply: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (isRateLimited) {
+      alert(`Too many requests. Please wait ${timeLeft} seconds before submitting again.`);
+      return;
+    }
+
     setValidationErrors({});
+
+    // Deep sanitize fields to prevent XSS string injections
+    const sanitizedData = {
+      ...formData,
+      fullName: DOMPurify.sanitize(formData.fullName),
+      email: DOMPurify.sanitize(formData.email),
+      linkedIn: DOMPurify.sanitize(formData.linkedIn),
+      location: DOMPurify.sanitize(formData.location),
+      startupName: DOMPurify.sanitize(formData.startupName),
+      sector: DOMPurify.sanitize(formData.sector),
+      startupType: DOMPurify.sanitize(formData.startupType),
+      launchTime: DOMPurify.sanitize(formData.launchTime),
+      stage: DOMPurify.sanitize(formData.stage),
+      problem: DOMPurify.sanitize(formData.problem),
+      solution: DOMPurify.sanitize(formData.solution),
+      targetMarket: DOMPurify.sanitize(formData.targetMarket),
+      traction: DOMPurify.sanitize(formData.traction),
+      team: DOMPurify.sanitize(formData.team),
+      teamSize: DOMPurify.sanitize(formData.teamSize),
+      whyVentureForge: DOMPurify.sanitize(formData.whyVentureForge),
+      coFounders: formData.coFounders.map(cf => ({
+        name: DOMPurify.sanitize(cf.name),
+        role: DOMPurify.sanitize(cf.role),
+        linkedIn: DOMPurify.sanitize(cf.linkedIn)
+      }))
+    };
     
     // Validate with Zod
     try {
-      ApplicationSchema.parse({ ...formData, role });
+      ApplicationSchema.parse({ ...sanitizedData, role });
     } catch (err) {
       if (err instanceof z.ZodError) {
         const errors: Record<string, string> = {};
@@ -99,6 +134,7 @@ const Apply: React.FC = () => {
 
       if (error) throw error;
       
+      triggerRateLimit();
       setIsSubmitted(true);
       window.scrollTo(0, 0);
       console.log('Application saved to database');

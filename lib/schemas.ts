@@ -31,3 +31,19 @@ export const TrafficLogSchema = z.object({
   user_agent: z.string().max(500).trim(),
   ip_address: z.string().max(45).trim().optional().nullable() // IP is usually added by DB but can be logged
 });
+
+export const ContactSchema = z.object({
+  name: z.string().min(2, "Name is too short").max(100, "Name is too long").trim(),
+  email: z.string().email("Invalid email address").trim().toLowerCase(),
+  subject: z.string().min(2, "Subject is too short").max(100, "Subject is too long").trim(),
+  message: z.string().min(10, "Message is too short").max(5000, "Message is too long").trim()
+});
+
+export const PartnershipSchema = z.object({
+  organization: z.string().min(2, "Organization name is too short").max(150, "Organization name is too long").trim(),
+  role: z.string().min(2, "Role is too short").max(100, "Role is too long").trim(),
+  interestArea: z.string().min(2, "Interest area is too short").max(100, "Interest area is too long").trim(),
+  email: z.string().email("Invalid email address").trim().toLowerCase(),
+  goals: z.string().min(10, "Goals description is too short").max(5000, "Goals description is too long").trim(),
+  terms: z.boolean().refine(val => val === true, { message: "You must agree to the terms." })
+});
