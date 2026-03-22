@@ -100,6 +100,7 @@ const Apply: React.FC = () => {
       if (error) throw error;
       
       setIsSubmitted(true);
+      window.scrollTo(0, 0);
       console.log('Application saved to database');
     } catch (err) {
       console.error('Error saving application:', err);
