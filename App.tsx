@@ -16,10 +16,9 @@ const FAQ = lazy(() => import('./pages/FAQ'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 const Terms = lazy(() => import('./pages/Terms'));
 const Legal = lazy(() => import('./pages/Legal'));
-
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
-import { supabase } from './lib/supabase';
+import { insforge } from './lib/insforge';
 import { TrafficLogSchema } from './lib/schemas';
 
 const Navbar: React.FC = () => {
@@ -140,7 +139,7 @@ const TrafficTracker: React.FC = () => {
         // Validate with Zod
         TrafficLogSchema.parse(trafficData);
 
-        const { error } = await supabase
+        const { error } = await insforge.database
           .from('traffic_logs')
           .insert(trafficData);
 

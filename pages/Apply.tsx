@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, User, Users, ArrowRight, Check, ChevronDown } from 'lucide-react';
 import { motion } from 'motion/react';
-import { supabase } from '../lib/supabase';
+import { insforge } from '../lib/insforge';
 import { ApplicationSchema } from '../lib/schemas';
 import { z } from 'zod';
 
@@ -74,10 +74,10 @@ const Apply: React.FC = () => {
       }
     }
 
-    // Save to Supabase
+    // Save to InsForge
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from('applications').insert({
+      const { error } = await insforge.database.from('applications').insert({
         full_name: formData.fullName,
         email: formData.email,
         linkedin: formData.linkedIn,
