@@ -1,7 +1,10 @@
 
 import React, { useState } from 'react';
-import { Plus, Trash2, User, Users, ArrowRight, Check } from 'lucide-react';
+import { Plus, Trash2, User, Users, ArrowRight, Check, ChevronDown } from 'lucide-react';
 import { motion } from 'motion/react';
+import { supabase } from '../lib/supabase';
+import { ApplicationSchema } from '../lib/schemas';
+import { z } from 'zod';
 
 const Apply: React.FC = () => {
   const [role, setRole] = useState<'founder' | 'co-founder' | null>(null);
@@ -24,6 +27,9 @@ const Apply: React.FC = () => {
     whyVentureForge: '',
     coFounders: [] as { name: string; role: string; linkedIn: string }[]
   });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -50,61 +56,90 @@ const Apply: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setValidationErrors({});
     
-    const subject = `Startup OS Application - ${formData.startupName || 'New Idea'} (${role})`;
-    
-    let coFoundersText = '';
-    if (formData.coFounders.length > 0) {
-      coFoundersText = '\nCo-Founders:\n' + formData.coFounders.map((cf, i) => 
-        `${i+1}. ${cf.name} (${cf.role}) - ${cf.linkedIn}`
-      ).join('\n');
+    // Validate with Zod
+    try {
+      ApplicationSchema.parse({ ...formData, role });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        const errors: Record<string, string> = {};
+        err.issues.forEach(e => {
+          if (e.path[0]) errors[e.path[0] as string] = e.message;
+        });
+        setValidationErrors(errors);
+        return;
+      }
     }
 
-    const body = `
-Startup OS Application Details:
--------------------------------
-Role: ${role === 'founder' ? 'Founder' : 'Co-Founder'}
-Full Name: ${formData.fullName}
-Email: ${formData.email}
-LinkedIn: ${formData.linkedIn}
-Location: ${formData.location}
-${coFoundersText}
+    // Save to Supabase
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from('applications').insert({
+        full_name: formData.fullName,
+        email: formData.email,
+        linkedin: formData.linkedIn,
+        location: formData.location,
+        startup_name: formData.startupName,
+        sector: formData.sector,
+        startup_type: formData.startupType,
+        launch_time: formData.launchTime,
+        stage: formData.stage,
+        problem: formData.problem,
+        solution: formData.solution,
+        target_market: formData.targetMarket,
+        traction: formData.traction,
+        team: formData.team,
+        team_size: formData.teamSize,
+        why_venture_forge: formData.whyVentureForge,
+        status: 'Pending'
+      });
 
-Startup Name: ${formData.startupName}
-Sector: ${formData.sector}
-Startup Type: ${formData.startupType}
-Expected Launch: ${formData.launchTime}
-Current Stage: ${formData.stage}
-Team Size: ${formData.teamSize}
-
-Problem:
-${formData.problem}
-
-Solution:
-${formData.solution}
-
-Target Market:
-${formData.targetMarket}
-
-Current Traction/Progress:
-${formData.traction}
-
-Team Background:
-${formData.team}
-
-Why Startup OS?
-${formData.whyVentureForge}
-    `.trim();
-
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const gmailUrl = isMobile 
-      ? `mailto:ventureforge.corp@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-      : `https://mail.google.com/mail/?view=cm&fs=1&to=ventureforge.corp@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    window.open(gmailUrl, '_blank');
+      if (error) throw error;
+      
+      setIsSubmitted(true);
+      console.log('Application saved to database');
+    } catch (err) {
+      console.error('Error saving application:', err);
+      alert('There was an error saving your application to our database. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (isSubmitted) {
+    return (
+      <div className="animate-in fade-in zoom-in duration-500 min-h-[80vh] flex flex-col items-center justify-center px-4 bg-transparent text-center">
+        <motion.div 
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="w-20 h-20 bg-emerald-500 text-white rounded-full flex items-center justify-center mb-8 shadow-xl shadow-emerald-500/20"
+        >
+          <Check className="w-10 h-10" />
+        </motion.div>
+        <h1 className="text-4xl font-black text-vf-blue mb-4 tracking-tight">Application Received</h1>
+        <p className="text-xl text-gray-600 max-w-lg mx-auto mb-10 font-medium">
+          Thank you, {formData.fullName.split(' ')[0]}. Your application for {formData.startupName || 'your startup'} has been successfully submitted to Venture Forge.
+        </p>
+        <div className="space-y-4">
+          <p className="text-sm text-gray-400 uppercase tracking-widest font-black">Next Steps</p>
+          <p className="text-sm text-gray-500 max-w-md mx-auto">
+            Our team will review your application within 3-5 business days. You will receive an update via email.
+          </p>
+          <div className="pt-8">
+            <button 
+              onClick={() => window.location.href = '/'}
+              className="px-8 py-4 bg-vf-blue text-white text-xs font-black uppercase tracking-widest rounded-sm hover:bg-slate-800 transition-all shadow-lg"
+            >
+              Back to Home
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!role) {
     return (
@@ -198,19 +233,23 @@ ${formData.whyVentureForge}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Full Name</label>
-                  <input required name="fullName" value={formData.fullName} onChange={handleChange} type="text" className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm" placeholder="Arjun Das" />
+                  <input required name="fullName" value={formData.fullName} onChange={handleChange} type="text" className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm ${validationErrors.fullName ? 'border-red-500' : 'border-gray-300'}`} placeholder="Arjun Das" />
+                  {validationErrors.fullName && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.fullName}</p>}
                 </div>
                 <div>
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Official Email</label>
-                  <input required name="email" value={formData.email} onChange={handleChange} type="email" className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm" placeholder="arjun@startup.com" />
+                  <input required name="email" value={formData.email} onChange={handleChange} type="email" className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm ${validationErrors.email ? 'border-red-500' : 'border-gray-300'}`} placeholder="arjun@startup.com" />
+                  {validationErrors.email && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.email}</p>}
                 </div>
                 <div>
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">LinkedIn Profile</label>
-                  <input required name="linkedIn" value={formData.linkedIn} onChange={handleChange} type="url" className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm" placeholder="https://linkedin.com/in/username" />
+                  <input required name="linkedIn" value={formData.linkedIn} onChange={handleChange} type="url" className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm ${validationErrors.linkedIn ? 'border-red-500' : 'border-gray-300'}`} placeholder="https://linkedin.com/in/username" />
+                  {validationErrors.linkedIn && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.linkedIn}</p>}
                 </div>
                 <div>
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Current Location</label>
-                  <input required name="location" value={formData.location} onChange={handleChange} type="text" className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm" placeholder="e.g. Bangalore, India" />
+                  <input required name="location" value={formData.location} onChange={handleChange} type="text" className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm ${validationErrors.location ? 'border-red-500' : 'border-gray-300'}`} placeholder="e.g. Bangalore, India" />
+                  {validationErrors.location && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.location}</p>}
                 </div>
               </div>
             </section>
@@ -303,11 +342,13 @@ ${formData.whyVentureForge}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Startup Name</label>
-                  <input required name="startupName" value={formData.startupName} onChange={handleChange} type="text" className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm" placeholder="e.g. AgriForge" />
+                  <input required name="startupName" value={formData.startupName} onChange={handleChange} type="text" className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm ${validationErrors.startupName ? 'border-red-500' : 'border-gray-300'}`} placeholder="e.g. AgriForge" />
+                  {validationErrors.startupName && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.startupName}</p>}
                 </div>
                 <div>
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Sector</label>
-                  <input required name="sector" value={formData.sector} onChange={handleChange} type="text" className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm" placeholder="e.g. AgriTech, EdTech" />
+                  <input required name="sector" value={formData.sector} onChange={handleChange} type="text" className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm ${validationErrors.sector ? 'border-red-500' : 'border-gray-300'}`} placeholder="e.g. AgriTech, EdTech" />
+                  {validationErrors.sector && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.sector}</p>}
                 </div>
                 
                 <div>
@@ -317,7 +358,7 @@ ${formData.whyVentureForge}
                       name="startupType" 
                       value={formData.startupType} 
                       onChange={handleChange} 
-                      className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm bg-white appearance-none"
+                      className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm bg-white appearance-none pr-10 ${validationErrors.startupType ? 'border-red-500' : 'border-gray-300'}`}
                     >
                       <option value="">Select Type</option>
                       {startupTypes.map(type => (
@@ -325,32 +366,43 @@ ${formData.whyVentureForge}
                       ))}
                       <option value="Other">Other</option>
                     </select>
+                    <ChevronDown className="absolute right-3 top-3.5 w-4 h-4 text-gray-400 pointer-events-none" />
                     {formData.startupType === 'Other' && (
                       <input 
                         required 
                         name="startupType" 
                         onChange={handleChange} 
                         type="text" 
-                        className="mt-4 w-full px-4 py-3 border border-gray-300 rounded-sm text-sm" 
+                        className={`mt-4 w-full px-4 py-3 border rounded-sm text-sm ${validationErrors.startupType ? 'border-red-500' : 'border-gray-300'}`} 
                         placeholder="Specify your startup type" 
                       />
                     )}
+                    {validationErrors.startupType && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.startupType}</p>}
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Expected Launching Time</label>
-                  <input required name="launchTime" value={formData.launchTime} onChange={handleChange} type="text" className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm" placeholder="e.g. Q3 2025, Next 6 months" />
+                  <input required name="launchTime" value={formData.launchTime} onChange={handleChange} type="text" className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm ${validationErrors.launchTime ? 'border-red-500' : 'border-gray-300'}`} placeholder="e.g. Q3 2025, Next 6 months" />
+                  {validationErrors.launchTime && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.launchTime}</p>}
                 </div>
 
                 <div className="md:col-span-2">
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Current Stage</label>
-                  <select name="stage" value={formData.stage} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm bg-white">
-                    <option value="Idea">Idea Stage</option>
-                    <option value="MVP">MVP / Prototype</option>
-                    <option value="Early Traction">Early Traction / Revenue</option>
-                    <option value="Scaling">Scaling</option>
-                  </select>
+                  <div className="relative">
+                    <select 
+                      name="stage" 
+                      value={formData.stage} 
+                      onChange={handleChange} 
+                      className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm bg-white appearance-none pr-10"
+                    >
+                      <option value="Idea">Idea Stage</option>
+                      <option value="MVP">MVP / Prototype</option>
+                      <option value="Early Traction">Early Traction / Revenue</option>
+                      <option value="Scaling">Scaling</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-3.5 w-4 h-4 text-gray-400 pointer-events-none" />
+                  </div>
                 </div>
               </div>
             </section>
@@ -361,15 +413,18 @@ ${formData.whyVentureForge}
               <div className="space-y-8">
                 <div>
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">What problem are you solving?</label>
-                  <textarea required name="problem" value={formData.problem} onChange={handleChange} rows={3} className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm" placeholder="Describe the pain point you've identified..."></textarea>
+                  <textarea required name="problem" value={formData.problem} onChange={handleChange} rows={3} className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm ${validationErrors.problem ? 'border-red-500' : 'border-gray-300'}`} placeholder="Describe the pain point you've identified..."></textarea>
+                  {validationErrors.problem && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.problem}</p>}
                 </div>
                 <div>
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">What is your solution?</label>
-                  <textarea required name="solution" value={formData.solution} onChange={handleChange} rows={3} className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm" placeholder="How does your product solve the problem?"></textarea>
+                  <textarea required name="solution" value={formData.solution} onChange={handleChange} rows={3} className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm ${validationErrors.solution ? 'border-red-500' : 'border-gray-300'}`} placeholder="How does your product solve the problem?"></textarea>
+                  {validationErrors.solution && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.solution}</p>}
                 </div>
                 <div>
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Who is your target market?</label>
-                  <input required name="targetMarket" value={formData.targetMarket} onChange={handleChange} type="text" className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm" placeholder="e.g. Small-scale farmers in North India" />
+                  <input required name="targetMarket" value={formData.targetMarket} onChange={handleChange} type="text" className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm ${validationErrors.targetMarket ? 'border-red-500' : 'border-gray-300'}`} placeholder="e.g. Small-scale farmers in North India" />
+                  {validationErrors.targetMarket && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.targetMarket}</p>}
                 </div>
               </div>
             </section>
@@ -399,11 +454,13 @@ ${formData.whyVentureForge}
                 </div>
                 <div>
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Current Traction / Progress</label>
-                  <textarea required name="traction" value={formData.traction} onChange={handleChange} rows={3} className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm" placeholder="Users, revenue, waitlist, or technical milestones achieved..."></textarea>
+                  <textarea required name="traction" value={formData.traction} onChange={handleChange} rows={3} className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm ${validationErrors.traction ? 'border-red-500' : 'border-gray-300'}`} placeholder="Users, revenue, waitlist, or technical milestones achieved..."></textarea>
+                  {validationErrors.traction && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.traction}</p>}
                 </div>
                 <div>
                   <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Team Background</label>
-                  <textarea required name="team" value={formData.team} onChange={handleChange} rows={3} className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm" placeholder="Who are the founders? What is your relevant experience?"></textarea>
+                  <textarea required name="team" value={formData.team} onChange={handleChange} rows={3} className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm ${validationErrors.team ? 'border-red-500' : 'border-gray-300'}`} placeholder="Who are the founders? What is your relevant experience?"></textarea>
+                  {validationErrors.team && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.team}</p>}
                 </div>
               </div>
             </section>
@@ -413,7 +470,8 @@ ${formData.whyVentureForge}
               <h2 className="text-xs font-black text-vf-blue uppercase tracking-[0.3em] mb-8 border-b border-gray-100 pb-2">05. Why Venture Forge?</h2>
               <div>
                 <label className="block text-[10px] font-black text-vf-blue uppercase tracking-widest mb-2">Why do you want to join Startup OS?</label>
-                <textarea required name="whyVentureForge" value={formData.whyVentureForge} onChange={handleChange} rows={3} className="w-full px-4 py-3 border border-gray-300 rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm" placeholder="What specific help do you need from us?"></textarea>
+                <textarea required name="whyVentureForge" value={formData.whyVentureForge} onChange={handleChange} rows={3} className={`w-full px-4 py-3 border rounded-sm focus:ring-1 focus:ring-vf-blue focus:border-vf-blue text-sm ${validationErrors.whyVentureForge ? 'border-red-500' : 'border-gray-300'}`} placeholder="What specific help do you need from us?"></textarea>
+                {validationErrors.whyVentureForge && <p className="text-[10px] text-red-500 mt-1 font-bold">{validationErrors.whyVentureForge}</p>}
               </div>
             </section>
 
@@ -430,8 +488,20 @@ ${formData.whyVentureForge}
             </div>
 
             <div className="pt-4">
-              <button type="submit" className="w-full py-5 bg-vf-blue text-white font-black text-xl rounded-sm hover:bg-slate-800 transition-all shadow-xl shadow-blue-900/10 active:scale-[0.98]">
-                Submit & Open Gmail
+              <button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="w-full py-5 bg-vf-blue text-white font-black text-xl rounded-sm hover:bg-slate-800 transition-all shadow-xl shadow-blue-900/10 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              >
+                {isSubmitting ? (
+                  <motion.div 
+                    animate={{ rotate: 360 }}
+                    transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                    className="w-6 h-6 border-2 border-white border-t-transparent rounded-full"
+                  />
+                ) : (
+                  'Submit Application'
+                )}
               </button>
               <p className="mt-6 text-[10px] text-center text-gray-400 uppercase tracking-widest">
                 By submitting, you agree to our Ethics Statement and Selection Criteria.

@@ -56,6 +56,7 @@ const Footer: React.FC = () => {
                   src="https://raw.githubusercontent.com/Venture-Forge/assets/main/logo.png" 
                   alt="Venture Forge" 
                   className="h-8 w-auto invert brightness-0"
+                  loading="lazy"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.parentElement?.querySelector('.logo-text')?.classList.remove('hidden');
@@ -145,10 +146,11 @@ const Footer: React.FC = () => {
               <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
                 Join 2,000+ founders receiving our weekly execution playbook.
               </p>
-              <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-3" onSubmit={(e) => e.preventDefault()} aria-label="Newsletter subscription">
                 <input 
                   type="email" 
                   placeholder="name@company.com" 
+                  aria-label="Email Address for Newsletter"
                   className="w-full bg-zinc-950 border border-zinc-800 px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-vf-blue/50 focus:border-vf-blue transition-all text-white placeholder:text-zinc-600"
                 />
                 <button 

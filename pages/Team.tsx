@@ -32,22 +32,22 @@ const Team: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
             {[
               {
-                name: "Sam",
+                name: "Sameer",
                 role: "Founder",
                 identity: "Builder focused on execution and systems",
-                image: "https://picsum.photos/seed/sam/400/400"
+                image: "https://picsum.photos/seed/sameer/400/400"
               },
               {
-                name: "Alex",
+                name: "Ananya",
                 role: "Operations Lead",
                 identity: "Scaling systems and optimizing founder workflows",
-                image: "https://picsum.photos/seed/alex/400/400"
+                image: "https://picsum.photos/seed/ananya/400/400"
               },
               {
-                name: "Jordan",
+                name: "Jai",
                 role: "Technical Advisor",
                 identity: "Full-stack architect with a focus on MVP speed",
-                image: "https://picsum.photos/seed/jordan/400/400"
+                image: "https://picsum.photos/seed/jai/400/400"
               }
             ].map((member, i) => (
               <motion.div 
@@ -101,14 +101,14 @@ const Team: React.FC = () => {
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { name: "Sarah Chen", domain: "Startup / Tech" },
-              { name: "Marcus Thorne", domain: "Finance / VC" },
-              { name: "Elena Rossi", domain: "Product Design" },
-              { name: "David Wu", domain: "Go-to-Market" },
-              { name: "Lisa Park", domain: "Legal / IP" },
-              { name: "Kevin Smith", domain: "Engineering" },
-              { name: "Maria Garcia", domain: "Operations" },
-              { name: "Tom Baker", domain: "Sales" }
+              { name: "Saira Khan", domain: "Startup / Tech" },
+              { name: "Mohan Tyagi", domain: "Finance / VC" },
+              { name: "Esha Reddy", domain: "Product Design" },
+              { name: "Deepak Verma", domain: "Go-to-Market" },
+              { name: "Lakshmi Pillai", domain: "Legal / IP" },
+              { name: "Karan Singh", domain: "Engineering" },
+              { name: "Meera G.", domain: "Operations" },
+              { name: "Tanmay B.", domain: "Sales" }
             ].map((mentor, i) => (
               <div key={i} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all text-center group/mentor">
                 <div className="h-4 w-24 bg-gray-300 rounded-sm mx-auto mb-1" title="Identity protected"></div>

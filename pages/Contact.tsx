@@ -65,7 +65,7 @@ const Contact: React.FC = () => {
                     </div>
                     <div>
                       <h4 className="font-bold text-vf-blue uppercase text-[10px] tracking-widest mb-1">Office Hours</h4>
-                      <p className="text-gray-600">Mon - Fri, 9am - 6pm EST</p>
+                      <p className="text-gray-600">Mon - Fri, 9am - 5pm IST</p>
                     </div>
                   </div>
 
@@ -75,7 +75,7 @@ const Contact: React.FC = () => {
                     </div>
                     <div>
                       <h4 className="font-bold text-vf-blue uppercase text-[10px] tracking-widest mb-1">Global Presence</h4>
-                      <p className="text-gray-600">Remote-first with hubs in NY, London, and Singapore.</p>
+                      <p className="text-gray-600">Remote-first with hubs in Kolkata, Delhi, Mumbai and Bangalore.</p>
                     </div>
                   </div>
                 </div>
@@ -104,7 +104,7 @@ const Contact: React.FC = () => {
                     <input 
                       type="text" 
                       required
-                      placeholder="Jane Doe"
+                      placeholder="Arjun Sharma"
                       className="w-full bg-gray-50 border border-gray-100 px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-vf-blue/50 focus:border-vf-blue transition-all"
                       value={formState.name}
                       onChange={(e) => setFormState({...formState, name: e.target.value})}
@@ -115,7 +115,7 @@ const Contact: React.FC = () => {
                     <input 
                       type="email" 
                       required
-                      placeholder="jane@company.com"
+                      placeholder="arjun@ventureforge.in"
                       className="w-full bg-gray-50 border border-gray-100 px-4 py-3 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-vf-blue/50 focus:border-vf-blue transition-all"
                       value={formState.email}
                       onChange={(e) => setFormState({...formState, email: e.target.value})}

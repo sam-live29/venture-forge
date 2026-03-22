@@ -1,21 +1,26 @@
 
 import React from 'react';
 import { HashRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import Home from './pages/Home';
-import About from './pages/About';
-import Accelerator from './pages/Accelerator';
-import Partners from './pages/Partners';
-import Apply from './pages/Apply';
-import Transparency from './pages/Transparency';
-import Methodology from './pages/Methodology';
-import Team from './pages/Team';
-import Contact from './pages/Contact';
-import FAQ from './pages/FAQ';
-import Privacy from './pages/Privacy';
-import Terms from './pages/Terms';
-import Legal from './pages/Legal';
+import { Suspense, lazy } from 'react';
+
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Accelerator = lazy(() => import('./pages/Accelerator'));
+const Partners = lazy(() => import('./pages/Partners'));
+const Apply = lazy(() => import('./pages/Apply'));
+const Transparency = lazy(() => import('./pages/Transparency'));
+const Methodology = lazy(() => import('./pages/Methodology'));
+const Team = lazy(() => import('./pages/Team'));
+const Contact = lazy(() => import('./pages/Contact'));
+const FAQ = lazy(() => import('./pages/FAQ'));
+const Privacy = lazy(() => import('./pages/Privacy'));
+const Terms = lazy(() => import('./pages/Terms'));
+const Legal = lazy(() => import('./pages/Legal'));
+
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import { supabase } from './lib/supabase';
+import { TrafficLogSchema } from './lib/schemas';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
@@ -80,8 +85,9 @@ const Navbar: React.FC = () => {
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-gray-600 hover:text-vf-blue focus:outline-none"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 {isOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 ) : (
@@ -118,28 +124,71 @@ const Navbar: React.FC = () => {
   );
 };
 
+
+const TrafficTracker: React.FC = () => {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    const logTraffic = async () => {
+      const trafficData = {
+        page_url: window.location.href,
+        referrer: document.referrer || null,
+        user_agent: navigator.userAgent,
+      };
+
+      try {
+        // Validate with Zod
+        TrafficLogSchema.parse(trafficData);
+
+        const { error } = await supabase
+          .from('traffic_logs')
+          .insert(trafficData);
+
+        if (error) {
+          // Silently fail if rate limited (Postgres trigger will raise error)
+          if (!error.message.includes('Rate limit exceeded')) {
+            console.error('Traffic logging failed:', error.message);
+          }
+        }
+      } catch (err) {
+        // Validation failed, skip logging
+      }
+    };
+    logTraffic();
+  }, [location.pathname]);
+
+  return null;
+};
+
 const App: React.FC = () => {
   return (
     <HashRouter>
+      <TrafficTracker />
       <div className="min-h-screen flex flex-col bg-transparent">
         <ScrollToTop />
         <Navbar />
         <main className="flex-grow pt-20">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/accelerator" element={<Accelerator />} />
-            <Route path="/partners" element={<Partners />} />
-            <Route path="/apply" element={<Apply />} />
-            <Route path="/transparency" element={<Transparency />} />
-            <Route path="/methodology" element={<Methodology />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/legal" element={<Legal />} />
-          </Routes>
+          <Suspense fallback={
+            <div className="flex items-center justify-center min-h-[60vh]">
+              <div className="w-8 h-8 border-4 border-vf-blue border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          }>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/accelerator" element={<Accelerator />} />
+              <Route path="/partners" element={<Partners />} />
+              <Route path="/apply" element={<Apply />} />
+              <Route path="/transparency" element={<Transparency />} />
+              <Route path="/methodology" element={<Methodology />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/legal" element={<Legal />} />
+            </Routes>
+          </Suspense>
         </main>
         <Footer />
       </div>

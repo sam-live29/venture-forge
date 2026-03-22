@@ -21,7 +21,7 @@ const Home: React.FC = () => {
   return (
     <div className="overflow-hidden">
       {/* Hero Section */}
-      <section className="relative pt-6 pb-12 lg:pt-10 lg:pb-24 bg-transparent overflow-hidden">
+      <section className="relative pt-6 pb-12 lg:pt-10 lg:pb-24 bg-transparent overflow-hidden min-h-[70vh] flex items-center">
         {/* Advanced Hero Illustration / Background */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <motion.div 
@@ -30,7 +30,13 @@ const Home: React.FC = () => {
             transition={{ duration: 1.5, ease: "easeOut" }}
             className="absolute top-[40%] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] z-0"
           >
-            <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" className="w-full h-full opacity-15">
+            <svg 
+              viewBox="0 0 1000 1000" 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="w-full h-full opacity-15"
+              role="img"
+              aria-hidden="true"
+            >
               <defs>
                 <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" style={{ stopColor: '#001F3F', stopOpacity: 0.2 }} />
@@ -64,6 +70,7 @@ const Home: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <Link 
                 to="/apply" 
+                aria-label="Apply to the Venture Forge accelerator as a founder"
                 className="group relative w-full sm:w-auto inline-flex items-center justify-center bg-vf-blue text-white px-8 py-4 text-lg font-black rounded-sm overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-lg"
               >
                 <span className="relative z-10 flex items-center">
@@ -74,6 +81,7 @@ const Home: React.FC = () => {
               
               <Link 
                 to="/partners" 
+                aria-label="Partner with Venture Forge"
                 className="group relative w-full sm:w-auto inline-flex items-center justify-center border-2 border-vf-blue text-vf-blue px-8 py-4 text-lg font-black rounded-sm overflow-hidden transition-all hover:scale-105 active:scale-95 hover:text-white"
               >
                 <span className="relative z-10">Partner with Us</span>
